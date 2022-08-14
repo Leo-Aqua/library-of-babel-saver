@@ -33,3 +33,6 @@ They are in /txt or for images in /img
 ### Opening images is wired and takes long to load
 I have to use selenium for images because you cant call images in the url bar like text. Any suggestions in the issues.
 
+
+# Credits
+[libraryofbabel.info](https://libraryofbabel.info)
