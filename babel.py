@@ -211,12 +211,49 @@ def main():
             
         elif choice == '2':
             read()
-           
+            
+            
             
         elif choice == '3':
             quit()
         else:
             print('Invalid Option')
             input('Press Enter to continue')
-            os.system('cls')
+            os.system('cls')#
+
+
+def install():
+    # Checks if img and txt directories exist
+    isDirimg = os.path.isdir('img')
+    isDirtxt = os.path.isdir('txt')
+    isFilecrm = os.path.isfile('chromedriver.exe')
+
+    # Creates directories
+    print('Installing...')
+    if isDirimg == False:
+        print('Creating directories...')
+        os.mkdir('img')
+        print('Done!')
+    if isDirtxt == False:
+        print('Creating directories...')
+        os.mkdir('txt')
+        print('Done!')
+    if isFilecrm == False:
+        print('Downloading chromedriver...')
+        # downloads choromedriver
+        import requests
+        from zipfile import ZipFile
+        url = 'https://chromedriver.storage.googleapis.com/105.0.5195.19/chromedriver_win32.zip'
+        response = requests.get(url)
+        open("driver.zip", "wb").write(response.content)
+        print('Zip downloaded!')
+        print('Extracting...')
+        zf = ZipFile('driver.zip', 'r')
+        zf.extractall('.')
+        zf.close()
+        print('Done!')
+        print('removing zip...')
+        os.remove('driver.zip')
+    print('Done!')
+install()
 main()
