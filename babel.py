@@ -1,6 +1,6 @@
 import os
 import win32clipboard
-
+from win32com.client import Dispatch
 def gen():
     
 
@@ -222,6 +222,36 @@ def main():
             os.system('cls')#
 
 
+def get_chrome_ver():
+    def get_version_via_com(filename):
+        global crm_version
+        parser = Dispatch("Scripting.FileSystemObject")
+        try:
+            crm_version = parser.GetFileVersion(filename)
+        except Exception:
+            return None
+        return crm_version
+
+    if __name__ == "__main__":
+        paths = [r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"]
+        crm_version = list(filter(None, [get_version_via_com(p) for p in paths]))[0]
+    
+    global ncrm_version
+    ver = crm_version.startswith('103')
+    if ver == True:
+        ncrm_version = '103.0.5060.134'
+    
+    ver = crm_version.startswith('104')
+    if ver == True:
+        ncrm_version = '104.0.5112.79'
+    ver = crm_version.startswith('105')
+    if ver == True:
+        ncrm_version = '105.0.5195.19'
+        
+
+
+
 def install():
     # Checks if img and txt directories exist
     isDirimg = os.path.isdir('img')
@@ -233,17 +263,24 @@ def install():
     if isDirimg == False:
         print('Creating directories...')
         os.mkdir('img')
+        f = open('img/.babelimg', 'w')
+        f.write('PLACEHOLDER')
+        f.close
         print('Done!')
     if isDirtxt == False:
         print('Creating directories...')
         os.mkdir('txt')
+        f = open('txt/.babel', 'w')
+        f.write('PLACEHOLDER')
+        f.close
         print('Done!')
     if isFilecrm == False:
         print('Downloading chromedriver...')
         # downloads choromedriver
         import requests
         from zipfile import ZipFile
-        url = 'https://chromedriver.storage.googleapis.com/105.0.5195.19/chromedriver_win32.zip'
+        print('Chrome version: ' + ncrm_version)
+        url = f'https://chromedriver.storage.googleapis.com/{ncrm_version}/chromedriver_win32.zip'
         response = requests.get(url)
         open("driver.zip", "wb").write(response.content)
         print('Zip downloaded!')
@@ -255,5 +292,8 @@ def install():
         print('removing zip...')
         os.remove('driver.zip')
     print('Done!')
+
+
+get_chrome_ver()
 install()
 main()
